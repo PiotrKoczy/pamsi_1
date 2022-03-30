@@ -1,17 +1,17 @@
 #ifndef MERGE_SORT_H // include guard
 #define MERGE_SORTH
 
-namespace std
-{
-    class MergeSort
-    {
-    private:
-        static int *extraArray;
-        static void mergeSort(int array[], int leftIDX, int rightIDX) {}
-        static void merge(int array[], int leftIDX, int middleIDX, int rightIDX) {}
+using namespace std;
 
-    public:
-        static void sort(int arrayToSort[], int size) {}
-    };
-}
+class MergeSort
+{
+public:
+    static int extraArray[];
+    void mergeSort(int*, int, int);
+    void merge(int*, int, int, int);
+    void sort(int*, int);
+    void createExtraArray(int size){for (int i=0;i<size;i++){extraArray[i]=0;}};
+    MergeSort(int);
+};
+
 #endif
