@@ -6,7 +6,7 @@
 #define SIZE 1000 // Liczba elementów do posortowania
 using namespace std;
 
-// Print the array
+// Wypisywanie tablicy do konsoli
 void printArray(int array[], int size)
 {
     for (int i = 0; i < size; i++)
@@ -14,6 +14,7 @@ void printArray(int array[], int size)
     cout << endl;
 }
 
+// Wypisywanie tablicy do pliku
 void printArrayToFile(int array[], int size, char filename[])
 {
     ofstream plikwy;
@@ -23,6 +24,7 @@ void printArrayToFile(int array[], int size, char filename[])
     plikwy.close();
 }
 
+//Funkcja odpowiedzialna za sortowanie tablicy. Otrzymuje informacje o położeniu "lewej" i "prawej" części tablicy, które sortując scala.
 void merge(int array[], int leftIDX, int middleIDX, int rightIDX)
 {
     static int extraArray[SIZE];
@@ -56,6 +58,7 @@ void merge(int array[], int leftIDX, int middleIDX, int rightIDX)
     }
 };
 
+//Funkcja odpowiedzialna za rekurencyjne dzielenie problemu na mniejsze a następnie przekazywanie danych do funkcji merge.
 void mergeSort(int array[], int leftIDX, int rightIDX)
 {
     if (leftIDX < rightIDX)
@@ -67,7 +70,7 @@ void mergeSort(int array[], int leftIDX, int rightIDX)
     }
 };
 
-// Driver program
+//Funkcja main, sortuje oraz zapisuje dane do pliku
 int main()
 {
 
