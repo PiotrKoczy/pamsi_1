@@ -5,12 +5,12 @@ using namespace std;
 
 class MergeSort
 {
+private:
+    int const_size=10;
+
 public:
-    static int extraArray[];
     void mergeSort(int*, int, int);
     void merge(int*, int, int, int);
-    void sort(int*, int);
-    void createExtraArray(int size){for (int i=0;i<size;i++){extraArray[i]=0;}};
     MergeSort(int);
 };
 

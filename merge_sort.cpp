@@ -1,10 +1,10 @@
 // Merge sort in C++
 
 #include <iostream>
+#include <fstream>
 #include "merge_sort.h"
+#define SIZE 1000 // Liczba elementów do posortowania
 using namespace std;
-// int MergeSort::extraArray[100]={1};
-
 
 // Print the array
 void printArray(int array[], int size)
@@ -14,19 +14,18 @@ void printArray(int array[], int size)
     cout << endl;
 }
 
-void MergeSort::mergeSort(int array[], int leftIDX, int rightIDX)
+void printArrayToFile(int array[], int size, char filename[])
 {
-    if (leftIDX < rightIDX)
-    {
-        int middleIDX = (leftIDX + rightIDX) / 2;
-        mergeSort(array, leftIDX, middleIDX);
-        mergeSort(array, middleIDX + 1, rightIDX);
-        merge(array, leftIDX, middleIDX, rightIDX);
-    }
-};
+    ofstream plikwy;
+    plikwy.open(filename);
+    for (int i = 0; i < size; i++)
+        plikwy << array[i] << "," << endl;
+    plikwy.close();
+}
 
-void MergeSort::merge(int array[], int leftIDX, int middleIDX, int rightIDX)
+void merge(int array[], int leftIDX, int middleIDX, int rightIDX)
 {
+    static int extraArray[SIZE];
     for (int i = leftIDX; i <= rightIDX; i++)
     {
         extraArray[i] = array[i];
@@ -57,37 +56,36 @@ void MergeSort::merge(int array[], int leftIDX, int middleIDX, int rightIDX)
     }
 };
 
-void MergeSort::sort(int arrayToSort[], int size)
+void mergeSort(int array[], int leftIDX, int rightIDX)
 {
-    extraArray[size];
-    mergeSort(arrayToSort, 0, size - 1);
+    if (leftIDX < rightIDX)
+    {
+        int middleIDX = (leftIDX + rightIDX) / 2;
+        mergeSort(array, leftIDX, middleIDX);
+        mergeSort(array, middleIDX + 1, rightIDX);
+        merge(array, leftIDX, middleIDX, rightIDX);
+    }
 };
-
-MergeSort::MergeSort(int size){
-        int extraArray[size]={0};
-}
 
 // Driver program
 int main()
 {
 
-    int size = 10;
+    int size = SIZE;
     int testArray[size];
     int testArray2[size];
     for (int i = 0; i < size; i++)
     {
-        int number = rand() % 100 + 1;
+        int number = rand() % 100000 + 1;
         testArray[i] = number;
         testArray2[i] = number;
-        MergeSort::extraArray[i]=number;
     }
-    
+
     printArray(testArray, size);
-    MergeSort sorting(size);
-    sorting.createExtraArray(size);
-    sorting.sort(testArray, size);
+    mergeSort(testArray, 0, size + 1);
 
     cout << "Sorted array: \n";
     printArray(testArray, size);
+    printArrayToFile(testArray, size, "merge_sort");
     return 0;
 }
