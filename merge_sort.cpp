@@ -1,85 +1,89 @@
-/ Merge sort in C++
+// Merge sort in C++
 
 #include <iostream>
+#include <merge_sort.h>
 using namespace std;
 
-// Merge two subarrays L and M into arr
-void merge(int arr[], int p, int q, int r) {
-  
-  // Create L ← A[p..q] and M ← A[q+1..r]
-  int n1 = q - p + 1;
-  int n2 = r - q;
-
-  int L[n1], M[n2];
-
-  for (int i = 0; i < n1; i++)
-    L[i] = arr[p + i];
-  for (int j = 0; j < n2; j++)
-    M[j] = arr[q + 1 + j];
-
-  // Maintain current index of sub-arrays and main array
-  int i, j, k;
-  i = 0;
-  j = 0;
-  k = p;
-
-  // Until we reach either end of either L or M, pick larger among
-  // elements L and M and place them in the correct position at A[p..r]
-  while (i < n1 && j < n2) {
-    if (L[i] <= M[j]) {
-      arr[k] = L[i];
-      i++;
-    } else {
-      arr[k] = M[j];
-      j++;
-    }
-    k++;
-  }
-
-  // When we run out of elements in either L or M,
-  // pick up the remaining elements and put in A[p..r]
-  while (i < n1) {
-    arr[k] = L[i];
-    i++;
-    k++;
-  }
-
-  while (j < n2) {
-    arr[k] = M[j];
-    j++;
-    k++;
-  }
-}
-
-// Divide the array into two subarrays, sort them and merge them
-void mergeSort(int arr[], int l, int r) {
-  if (l < r) {
-    // m is the point where the array is divided into two subarrays
-    int m = l + (r - l) / 2;
-
-    mergeSort(arr, l, m);
-    mergeSort(arr, m + 1, r);
-
-    // Merge the sorted subarrays
-    merge(arr, l, m, r);
-  }
-}
 
 // Print the array
-void printArray(int arr[], int size) {
-  for (int i = 0; i < size; i++)
-    cout << arr[i] << " ";
-  cout << endl;
+void printArray(int array[], int size)
+{
+    for (int i = 0; i < size; i++)
+        cout << array[i] << " ";
+    cout << endl;
 }
 
+class MergeSort
+{
+private:
+    static int* extraArray;
+    static void mergeSort(int array[], int leftIDX, int rightIDX)
+    {
+        if (leftIDX < rightIDX)
+        {
+            int middleIDX = (leftIDX + rightIDX) / 2;
+            mergeSort(array, leftIDX, middleIDX);
+            mergeSort(array, middleIDX + 1, rightIDX);
+            merge(array, leftIDX, middleIDX, rightIDX);
+        }
+    }
+    static void merge(int array[], int leftIDX, int middleIDX, int rightIDX)
+    {
+        for (int i = leftIDX; i <= rightIDX; i++)
+        {
+            extraArray[i] = array[i];
+        }
+        int finger1, current = leftIDX;
+        int finger2 = middleIDX + 1;
+
+        while (finger1 <= middleIDX && finger2 <= rightIDX)
+        {
+            if (extraArray[finger1] <= extraArray[finger2])
+            {
+                array[current] = extraArray[finger1];
+                finger1++;
+            }
+            else
+            {
+                array[current] = extraArray[finger2];
+                finger2++;
+            }
+            current++;
+        }
+        while (finger1 <= middleIDX)
+        {
+            array[current] = extraArray[finger1];
+            current++;
+            finger1++;
+        }
+    }
+
+public:
+    static void sort(int arrayToSort[],int size)
+    {
+        extraArray[size];
+        mergeSort(arrayToSort, 0, size - 1);
+    }
+};
+
 // Driver program
-int main() {
-  int arr[] = {6, 5, 12, 10, 9, 1};
-  int size = sizeof(arr) / sizeof(arr[0]);
+int main()
+{
+    int size = 10;
+    int testArray[size];
+    int testArray2[size];
+    for (int i = 0; i < size; i++)
+    {
+        int number = rand() % 100 + 1;
+        testArray[i] = number;
+        testArray2[i] = number;
+    }
 
-  mergeSort(arr, 0, size - 1);
+    printArray(testArray, size);
 
-  cout << "Sorted array: \n";
-  printArray(arr, size);
-  return 0;
+    MergeSort::sort(testArray, size);
+
+    cout << "Sorted array: \n";
+    printArray(testArray, size);
+    return 0;
 }
