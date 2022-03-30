@@ -1,4 +1,3 @@
-// Merge sort in C++
 
 #include <iostream>
 #include <fstream>

@@ -8,7 +8,8 @@
             "type": "cppdbg",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceRoot}/merge_sort.out"
+            "program": "${workspaceRoot}/a.out",
+            "cwd":".",
         }
     ]
 }

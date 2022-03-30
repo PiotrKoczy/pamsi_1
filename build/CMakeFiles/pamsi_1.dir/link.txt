@@ -1,0 +1,2 @@
+/usr/bin/ar qc libpamsi_1.a  CMakeFiles/pamsi_1.dir/pamsi_1.cpp.o
+/usr/bin/ranlib libpamsi_1.a
