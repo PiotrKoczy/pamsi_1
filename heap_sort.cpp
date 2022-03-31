@@ -1,7 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <random>
-#define SIZE 1000 // Liczba elementów do posortowania
+#include <chrono> 
+#define SIZE 10000 // Liczba elementów do posortowania
 using namespace std;
 
 // Wypisywanie tablicy do konsoli
@@ -95,14 +96,11 @@ void endHeapSort(int array[], int size)
     for (int done_nr = 1; done_nr < size-1; done_nr++)
     {
         swap(array[0], array[size - done_nr]);
-        // printArray(array, size);
         for (int parentID = 0; parentID < SIZE - (done_nr+1); parentID++)
         {
             swapWithBiggerChild(array, parentID, done_nr);
-            //printArray(array, size);
         }
     }
-    //printArray(array, size);
 }
 
 int main()
@@ -113,7 +111,7 @@ int main()
     int testArray2[size];
     for (int i = 0; i < size; i++)
     {
-        int number = rand() % 100 + 1;
+        int number = rand() % 1000 + 1;
         testArray[i] = number;
         testArray2[i] = number;
     }
@@ -122,13 +120,15 @@ int main()
     // int testArray[] = {9, 7, 4, 3, 6, 5, 1, 2, 8, 11};
 
     //printArray(testArray, size);
+    auto start = std::chrono::high_resolution_clock::now();
     heapSort(testArray, size);
-    cout << "Sorted heapSort: \n";
-    printArray(testArray, size);
     endHeapSort(testArray, size);
+    auto finish = std::chrono::high_resolution_clock::now();
 
     cout << "Sorted endHeapSort: \n";
     printArray(testArray, size);
+    std::chrono::duration<double> elapsed = finish - start;
+    std::cout << "Elapsed time: " << elapsed.count() << " s\n";
     printArrayToFile(testArray, size, "merge_sort");
     return 0;
 }

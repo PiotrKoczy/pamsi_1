@@ -1,7 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <random>
-#define SIZE 1000 // Liczba elementów do posortowania
+#include <chrono> 
+#define SIZE 10000 // Liczba elementów do posortowania
 using namespace std;
 
 // Wypisywanie tablicy do konsoli
@@ -119,13 +120,13 @@ int quickSort(int array[], int size)
         iteration++;
         int leftIDX = 0;
         int rightIDX = size - 1;
-        printArray(array, size);
+        //printArray(array, size);
         if (leftIDX < rightIDX)
         {
             int pivotValue = generatePivotValue(array, leftIDX, rightIDX);
             while (leftIDX <= rightIDX)
             {
-                printArray(array, size);
+                //printArray(array, size);
                 while (array[leftIDX] < pivotValue)
                     leftIDX++;
                 while (array[rightIDX] > pivotValue)
@@ -162,7 +163,7 @@ int main()
     int testArray2[size];
     for (int i = 0; i < size; i++)
     {
-        int number = rand() % 100 + 1;
+        int number = rand() % 1000 + 1;
         testArray[i] = number;
         testArray2[i] = number;
     }
@@ -171,9 +172,13 @@ int main()
     // int testArray[] = {9, 7, 4, 3, 6, 5, 1, 2, 8, 11};
 
     // printArray(testArray, size);
+    auto start = std::chrono::high_resolution_clock::now();
     introSort(testArray, size);
+    auto finish = std::chrono::high_resolution_clock::now();
     cout << "Sorted introsort: \n";
     printArray(testArray, size);
+    std::chrono::duration<double> elapsed = finish - start;
+    std::cout << "Elapsed time: " << elapsed.count() << " s\n";
     printArrayToFile(testArray, size, "merge_sort");
     return 0;
 }

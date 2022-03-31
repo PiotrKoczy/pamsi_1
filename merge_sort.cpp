@@ -1,8 +1,10 @@
 
 #include <iostream>
 #include <fstream>
+#include <random>
+#include <chrono> 
 #include "merge_sort.h"
-#define SIZE 1000 // Liczba elementów do posortowania
+#define SIZE 1000000 // Liczba elementów do posortowania
 using namespace std;
 
 // Wypisywanie tablicy do konsoli
@@ -72,9 +74,9 @@ void mergeSort(int array[], int leftIDX, int rightIDX)
 //Funkcja main, sortuje oraz zapisuje dane do pliku
 int main()
 {
-
+    srand(1);
     int size = SIZE;
-    int testArray[size];
+    int testArray[size]; // 4 7 8 6 4 6 7 3 10
     int testArray2[size];
     for (int i = 0; i < size; i++)
     {
@@ -84,10 +86,14 @@ int main()
     }
 
     printArray(testArray, size);
+    auto start = std::chrono::high_resolution_clock::now();
     mergeSort(testArray, 0, size + 1);
+    auto finish = std::chrono::high_resolution_clock::now();
 
     cout << "Sorted array: \n";
     printArray(testArray, size);
+    std::chrono::duration<double> elapsed = finish - start;
+    std::cout << "Elapsed time: " << elapsed.count() << " s\n";
     printArrayToFile(testArray, size, "merge_sort");
     return 0;
 }
