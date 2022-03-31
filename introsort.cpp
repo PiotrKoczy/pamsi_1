@@ -137,7 +137,7 @@ int main()
         auto finish = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> elapsed = finish - start;
         std::cout << "Elapsed time: " << elapsed.count() << " s\n";
-        printResultToFile(i + 1, size, elapsed.count(), "quick_sort-wyniki.txt");
+        printResultToFile(i + 1, size, elapsed.count(), "introsort-wyniki.txt");
     }
     return 0;
 }
