@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="Linux-g++"
+	BuildStamp="20220331-0551-Experimental"
+	Name="ejmi"
+	Generator="ctest-3.16.3"
+	CompilerName="/usr/bin/g++"
+	CompilerVersion="9.4.0"
+	OSName="Linux"
+	Hostname="ejmi"
+	OSRelease="5.13.0-39-generic"
+	OSVersion="#44~20.04.1-Ubuntu SMP Thu Mar 24 16:43:35 UTC 2022"
+	OSPlatform="x86_64"
+	Is64Bits="1"
+	VendorString="GenuineIntel"
+	VendorID="Intel Corporation"
+	FamilyID="6"
+	ModelID="60"
+	ProcessorCacheSize="6144"
+	NumberOfLogicalCPU="8"
+	NumberOfPhysicalCPU="4"
+	TotalVirtualMemory="3813"
+	TotalPhysicalMemory="15694"
+	LogicalProcessorsPerPhysical="2"
+	ProcessorClockFrequency="1000"
+	>
+	<Testing>
+		<StartDateTime>Mar 31 07:51 CEST</StartDateTime>
+		<StartTestTime>1648705903</StartTestTime>
+		<TestList/>
+		<EndDateTime>Mar 31 07:51 CEST</EndDateTime>
+		<EndTestTime>1648705903</EndTestTime>
+		<ElapsedMinutes>0</ElapsedMinutes>
+	</Testing>
+</Site>

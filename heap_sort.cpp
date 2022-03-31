@@ -7,8 +7,8 @@ using namespace std;
 // Wypisywanie tablicy do konsoli
 void printArray(int array[], int size)
 {
-    for (int parentID = 0; parentID < size; parentID++)
-        cout << array[parentID] << " ";
+    for (int i = 0; i < size; i++)
+        cout << array[i] << " ";
     cout << endl;
 }
 
@@ -17,8 +17,8 @@ void printArrayToFile(int array[], int size, char filename[])
 {
     ofstream plikwy;
     plikwy.open(filename);
-    for (int parentID = 0; parentID < size; parentID++)
-        plikwy << array[parentID] << "," << endl;
+    for (int i = 0; i < size; i++)
+        plikwy << array[i] << "," << endl;
     plikwy.close();
 }
 
@@ -76,9 +76,11 @@ void swapWithBiggerChild(int array[], int parentID, int done_nr)
     int largestChildID = findLargestChild(array, parentID);
     if (largestChildID > 0)
     {
-        printArray(array, SIZE);
-        int tmp1 = parentID;
-        int tmp2 = largestChildID;
+        //printArray(array, SIZE);
+        int tmp1IDX = parentID;
+        int tmp2IDX = largestChildID;
+        int tmp1 = array[parentID];
+        int tmp2 = array[largestChildID];
         if ((largestChildID < SIZE - done_nr) && (array[largestChildID] > array[parentID]))
             swap(array[parentID], array[largestChildID]);
         // printArray(array, SIZE);
@@ -90,17 +92,17 @@ void endHeapSort(int array[], int size)
 {
     int parentID;
     int finalArray[size];
-    for (int done_nr = 1; done_nr < size; done_nr++)
+    for (int done_nr = 1; done_nr < size-1; done_nr++)
     {
         swap(array[0], array[size - done_nr]);
         // printArray(array, size);
-        for (int parentID = 0; parentID < SIZE - done_nr; parentID++)
+        for (int parentID = 0; parentID < SIZE - (done_nr+1); parentID++)
         {
             swapWithBiggerChild(array, parentID, done_nr);
             printArray(array, size);
         }
     }
-    printArray(array, size);
+    //printArray(array, size);
 }
 
 int main()
