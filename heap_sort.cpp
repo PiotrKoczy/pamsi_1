@@ -54,12 +54,12 @@ int findLargestChild(int array[], int parentID)
 void heapSort(int array[], int size)
 {
     int parentID;
-    for (int parentID = size - 1; parentID > 0; parentID--)
+    for (int i = size - 1; i > 0; i--)
     {
-        if ((parentID - 1) % 2 == 0)
-            parentID = (parentID - 1) / 2;
+        if ((i - 1) % 2 == 0)
+            parentID = (i - 1) / 2;
         else
-            parentID = (parentID - 2) / 2;
+            parentID = (i - 2) / 2;
 
         int largestChildID = findLargestChild(array, parentID);
 
@@ -92,10 +92,11 @@ void endHeapSort(int array[], int size)
     for (int done_nr = 1; done_nr < size; done_nr++)
     {
         swap(array[0], array[size - done_nr]);
+        printArray(array, size);
         for (int parentID = 0; parentID < SIZE - done_nr; parentID++)
         {
             swapWithBiggerChild(array, parentID, done_nr);
-            //printArray(array, size);
+            printArray(array, size);
         }
     }
     printArray(array, size);
