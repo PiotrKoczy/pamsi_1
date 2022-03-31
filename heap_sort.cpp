@@ -67,7 +67,7 @@ void heapSort(int array[], int size)
         int tmp2 = array[largestChildID];
         if (array[parentID] < array[largestChildID])
             swap(array[parentID], array[largestChildID]);
-        //printArray(array, size);
+        // printArray(array, size);
     }
 }
 
@@ -76,11 +76,12 @@ void swapWithBiggerChild(int array[], int parentID, int done_nr)
     int largestChildID = findLargestChild(array, parentID);
     if (largestChildID > 0)
     {
+        printArray(array, SIZE);
         int tmp1 = parentID;
         int tmp2 = largestChildID;
-        if (largestChildID < SIZE - done_nr)
+        if ((largestChildID < SIZE - done_nr) && (array[largestChildID] > array[parentID]))
             swap(array[parentID], array[largestChildID]);
-        //printArray(array, SIZE);
+        // printArray(array, SIZE);
         swapWithBiggerChild(array, largestChildID, done_nr);
     }
 }
@@ -92,7 +93,7 @@ void endHeapSort(int array[], int size)
     for (int done_nr = 1; done_nr < size; done_nr++)
     {
         swap(array[0], array[size - done_nr]);
-        printArray(array, size);
+        // printArray(array, size);
         for (int parentID = 0; parentID < SIZE - done_nr; parentID++)
         {
             swapWithBiggerChild(array, parentID, done_nr);
