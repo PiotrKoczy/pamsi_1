@@ -22,33 +22,13 @@ void printArrayToFile(int array[], int size, char filename[])
     plikwy.close();
 }
 
-int middleOfThree(int a, int b, int c)
-{
-    // Checking for b
-    if ((a < b && b < c) || (c < b && b < a))
-        return b;
 
-    // Checking for a
-    else if ((b < a && a < c) || (c < a && a < b))
-        return a;
-
-    else
-        return c;
-}
-
-int generatePivotValue(int array[], int leftIDX, int rightIDX)
-{
-    int mid = leftIDX + (rightIDX - leftIDX) / 2;
-    return array[mid];
-}
 
 // void quickSort(int array[], int leftIDX, int rightIDX)
 // {
 //     int extraArray[SIZE];
-
 //     int finger = leftIDX;
 //     int border = leftIDX - 1;
-
 //     int pivot = generatePivotValue(array,leftIDX,rightIDX);
 //     //int pivot = array[rightIDX];
 //     if (leftIDX < rightIDX)
@@ -73,6 +53,12 @@ int generatePivotValue(int array[], int leftIDX, int rightIDX)
 //         quickSort(array, border + 1, rightIDX);
 //     }
 // }
+
+int generatePivotValue(int array[], int leftIDX, int rightIDX)
+{
+    int mid = leftIDX + (rightIDX - leftIDX) / 2;
+    return array[mid];
+}
 
 void quickSort(int array[], int size)
 {
@@ -107,16 +93,6 @@ int main()
 {
     srand(1);
     int size = SIZE;
-    // int testArray[size]; // 4 7 8 6 4 6 7 3 10
-    // int testArray2[size];
-    // for (int i = 0; i < size; i++)
-    // {
-    //     int number = rand() % 10 + 1;
-    //     testArray[i] = number;
-    //     testArray2[i] = number;
-    // }
-    // int testArray[] = {9, 1, 2, 4, 5, 7, 8, 6, 3};
-    // int testArray[] = {4,7,8,6,4,6,7,5,10};
     int testArray[] = {0, 1, 2, 3, 4, 5, 7, 5, 10};
 
     printArray(testArray, size);

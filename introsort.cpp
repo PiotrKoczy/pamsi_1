@@ -76,7 +76,7 @@ void swapWithBiggerChild(int array[], int parentID, int done_nr)
     int largestChildID = findLargestChild(array, parentID);
     if (largestChildID > 0)
     {
-        //printArray(array, SIZE);
+        // printArray(array, SIZE);
         int tmp1IDX = parentID;
         int tmp2IDX = largestChildID;
         int tmp1 = array[parentID];
@@ -92,17 +92,66 @@ void endHeapSort(int array[], int size)
 {
     int parentID;
     int finalArray[size];
-    for (int done_nr = 1; done_nr < size-1; done_nr++)
+    for (int done_nr = 1; done_nr < size - 1; done_nr++)
     {
         swap(array[0], array[size - done_nr]);
         // printArray(array, size);
-        for (int parentID = 0; parentID < SIZE - (done_nr+1); parentID++)
+        for (int parentID = 0; parentID < SIZE - (done_nr + 1); parentID++)
         {
             swapWithBiggerChild(array, parentID, done_nr);
-            //printArray(array, size);
+            // printArray(array, size);
         }
     }
-    //printArray(array, size);
+    // printArray(array, size);
+}
+
+int generatePivotValue(int array[], int leftIDX, int rightIDX)
+{
+    int mid = leftIDX + (rightIDX - leftIDX) / 2;
+    return array[mid];
+}
+
+int quickSort(int array[], int size)
+{
+    static int iteration = 0;
+    if (iteration < 5)
+    {
+        iteration++;
+        int leftIDX = 0;
+        int rightIDX = size - 1;
+        printArray(array, size);
+        if (leftIDX < rightIDX)
+        {
+            int pivotValue = generatePivotValue(array, leftIDX, rightIDX);
+            while (leftIDX <= rightIDX)
+            {
+                printArray(array, size);
+                while (array[leftIDX] < pivotValue)
+                    leftIDX++;
+                while (array[rightIDX] > pivotValue)
+                    rightIDX--;
+                if (leftIDX <= rightIDX) // ta nierówność jest spełniona jeśli po obu stronach znalazła się liczba do przestawienia
+                {
+                    if (array[leftIDX] != array[rightIDX])
+                        swap(array[leftIDX], array[rightIDX]);
+                    leftIDX++;
+                    rightIDX--;
+                }
+            }
+            quickSort(array, rightIDX + 1);             // od lewej krawędzi do pierwszej nieuporządowanej liczby
+            quickSort(&array[leftIDX], size - leftIDX); // od pierwszej nieuporządkowanej liczby do prawej krawędzi
+        }
+    }
+    return iteration;
+}
+
+void introSort(int array[], int size)
+{
+    if (quickSort(array, size) == 5)
+    {
+        heapSort(array, size);
+        endHeapSort(array, size);
+    }
 }
 
 int main()
@@ -118,16 +167,12 @@ int main()
         testArray2[i] = number;
     }
     // int testArray[] = {9, 1, 2, 4, 5, 7, 8, 6, 3};
-    //int testArray[] = {4,7,8,6,4,6,7,5,10,69};
+    // int testArray[] = {4,7,8,6,4,6,7,5,10,69};
     // int testArray[] = {9, 7, 4, 3, 6, 5, 1, 2, 8, 11};
 
-    //printArray(testArray, size);
-    heapSort(testArray, size);
-    cout << "Sorted heapSort: \n";
-    printArray(testArray, size);
-    endHeapSort(testArray, size);
-
-    cout << "Sorted endHeapSort: \n";
+    // printArray(testArray, size);
+    introSort(testArray, size);
+    cout << "Sorted introsort: \n";
     printArray(testArray, size);
     printArrayToFile(testArray, size, "merge_sort");
     return 0;
