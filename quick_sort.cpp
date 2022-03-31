@@ -26,14 +26,20 @@ int middleOfThree(int a, int b, int c)
 {
     // Checking for b
     if ((a < b && b < c) || (c < b && b < a))
-       return b;
- 
+        return b;
+
     // Checking for a
     else if ((b < a && a < c) || (c < a && a < b))
-       return a;
- 
+        return a;
+
     else
-       return c;
+        return c;
+}
+
+int generatePivotValue(int array[], int leftIDX, int rightIDX){
+    int mid = leftIDX+(rightIDX-leftIDX)/2;
+    swap(array[mid],array[rightIDX]); //14:50 po co??
+    return array[mid];
 }
 
 void quickSort(int array[], int leftIDX, int rightIDX)
@@ -41,50 +47,30 @@ void quickSort(int array[], int leftIDX, int rightIDX)
     int extraArray[SIZE];
 
     int finger = leftIDX;
-    int border = leftIDX-1;
-    random_device rd;                                    // obtain a random number from hardware
-    mt19937 gen(rd());                                   // seed the generator
-    uniform_int_distribution<> distr(leftIDX, rightIDX); // define the range
-    int idx1 = distr(gen);
-    int idx2 = distr(gen);
-    int idx3 = distr(gen);
-    
+    int border = leftIDX - 1;
 
-    int pivot = middleOfThree(idx1,idx2,idx3);
-    while (finger < rightIDX)
+    int pivot = generatePivotValue(array,leftIDX,rightIDX);
+    //int pivot = array[rightIDX];
+    if (leftIDX < rightIDX)
     {
-        if (array[finger] > array[pivot])
+        while (finger < rightIDX)
+        {
+            if (array[finger] < pivot)
+            {
+                border++;
+                if (border != finger)
+                    swap(array[finger], array[border]);
+            }
             finger++;
-        if (array[finger] < array[pivot])
-        {
-            for (int i = 0; i <= SIZE; i++)
-            {
-                extraArray[i] = array[i];
-            }
-            if (array[finger] != array[border])
-                swap(array[finger], array[border+1]);
-            
-            finger++;
+            printArray(array, SIZE);
         }
-        if (array[finger] == array[pivot])
+        border++;
+        if (border != rightIDX)
         {
-            if (array[border+1] != array[pivot])
-                swap(array[border+1], array[pivot]);
-            if (leftIDX < border - 1)
-            {
-                printArray(array, SIZE);
-                quickSort(array, leftIDX, border - 1);
-            }
-            if (border + 1 < rightIDX)
-            {
-                printArray(array, SIZE);
-                quickSort(array, border + 1, rightIDX);
-            }
+            swap(array[rightIDX], array[border]);
         }
-        for (int i = 0; i <= SIZE; i++)
-        {
-            extraArray[i] = array[i];
-        }
+        quickSort(array, leftIDX, border - 1);
+        quickSort(array, border + 1, rightIDX);
     }
 }
 
@@ -93,15 +79,15 @@ int main()
 {
     srand(1);
     int size = SIZE;
-    int testArray[size]; //4 7 8 6 4 6 7 3 10 
-    int testArray2[size];
-    for (int i = 0; i < size; i++)
-    {
-        int number = rand() % 10 + 1;
-        testArray[i] = number;
-        testArray2[i] = number;
-    }
-    // int testArray[] = {9, 1, 2, 4, 5, 7, 8, 6, 3};
+    // int testArray[size]; // 4 7 8 6 4 6 7 3 10
+    // int testArray2[size];
+    // for (int i = 0; i < size; i++)
+    // {
+    //     int number = rand() % 10 + 1;
+    //     testArray[i] = number;
+    //     testArray2[i] = number;
+    // }
+    int testArray[] = {9, 1, 2, 4, 5, 7, 8, 6, 3};
 
     printArray(testArray, size);
     quickSort(testArray, 0, size - 1);
