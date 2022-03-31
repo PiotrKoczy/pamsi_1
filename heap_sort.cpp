@@ -7,8 +7,8 @@ using namespace std;
 // Wypisywanie tablicy do konsoli
 void printArray(int array[], int size)
 {
-    for (int i = 0; i < size; i++)
-        cout << array[i] << " ";
+    for (int parentID = 0; parentID < size; parentID++)
+        cout << array[parentID] << " ";
     cout << endl;
 }
 
@@ -17,16 +17,16 @@ void printArrayToFile(int array[], int size, char filename[])
 {
     ofstream plikwy;
     plikwy.open(filename);
-    for (int i = 0; i < size; i++)
-        plikwy << array[i] << "," << endl;
+    for (int parentID = 0; parentID < size; parentID++)
+        plikwy << array[parentID] << "," << endl;
     plikwy.close();
 }
 
-int largest(int array[], int parentID)
+int findLargestChild(int array[], int parentID)
 {
     int largest;
+    int root = array[parentID];
     int i = parentID;
-    int root = array[i];
     int child;
     if ((2 * i + 1 < SIZE) && (2 * i + 2 < SIZE))
     {
@@ -47,28 +47,58 @@ int largest(int array[], int parentID)
         child = 2 * i + 1;
     }
     else
-        return NULL;
+        return -1;
     return child;
 }
 
 void heapSort(int array[], int size)
 {
     int parentID;
-    for (int i = size - 1; i > 0; i--)
+    for (int parentID = size - 1; parentID > 0; parentID--)
     {
-        if ((i - 1) % 2 == 0)
-            parentID = (i - 1) / 2;
+        if ((parentID - 1) % 2 == 0)
+            parentID = (parentID - 1) / 2;
         else
-            parentID = (i - 2) / 2;
+            parentID = (parentID - 2) / 2;
 
-        int largestChild = largest(array, parentID);
+        int largestChildID = findLargestChild(array, parentID);
 
         int tmp1 = array[parentID];
-        int tmp2 = array[largestChild];
-        if (array[parentID] < array[largestChild])
-            swap(array[parentID], array[largestChild]);
-        printArray(array, size);
+        int tmp2 = array[largestChildID];
+        if (array[parentID] < array[largestChildID])
+            swap(array[parentID], array[largestChildID]);
+        //printArray(array, size);
     }
+}
+
+void swapWithBiggerChild(int array[], int parentID, int done_nr)
+{
+    int largestChildID = findLargestChild(array, parentID);
+    if (largestChildID > 0)
+    {
+        int tmp1 = parentID;
+        int tmp2 = largestChildID;
+        if (largestChildID < SIZE - done_nr)
+            swap(array[parentID], array[largestChildID]);
+        //printArray(array, SIZE);
+        swapWithBiggerChild(array, largestChildID, done_nr);
+    }
+}
+
+void endHeapSort(int array[], int size)
+{
+    int parentID;
+    int finalArray[size];
+    for (int done_nr = 1; done_nr < size; done_nr++)
+    {
+        swap(array[0], array[size - done_nr]);
+        for (int parentID = 0; parentID < SIZE - done_nr; parentID++)
+        {
+            swapWithBiggerChild(array, parentID, done_nr);
+            //printArray(array, size);
+        }
+    }
+    printArray(array, size);
 }
 
 int main()
@@ -77,11 +107,11 @@ int main()
     int size = SIZE;
     // int testArray[size]; // 4 7 8 6 4 6 7 3 10
     // int testArray2[size];
-    // for (int i = 0; i < size; i++)
+    // for (int parentID = 0; parentID < size; parentID++)
     // {
     //     int number = rand() % 10 + 1;
-    //     testArray[i] = number;
-    //     testArray2[i] = number;
+    //     testArray[parentID] = number;
+    //     testArray2[parentID] = number;
     // }
     // int testArray[] = {9, 1, 2, 4, 5, 7, 8, 6, 3};
     // int testArray[] = {4,7,8,6,4,6,7,5,10};
@@ -89,8 +119,11 @@ int main()
 
     printArray(testArray, size);
     heapSort(testArray, size);
+    cout << "Sorted heapSort: \n";
+    printArray(testArray, size);
+    endHeapSort(testArray, size);
 
-    cout << "Sorted array: \n";
+    cout << "Sorted endHeapSort: \n";
     printArray(testArray, size);
     printArrayToFile(testArray, size, "merge_sort");
     return 0;
