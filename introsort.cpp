@@ -2,7 +2,9 @@
 #include <fstream>
 #include <random>
 #include <chrono> 
-#define SIZE 10000 // Liczba elementów do posortowania
+#define SIZE 1000000 // Liczba elementów do posortowania
+#define ITERATION 5
+
 using namespace std;
 
 // Wypisywanie tablicy do konsoli
@@ -23,88 +25,38 @@ void printArrayToFile(int array[], int size, char filename[])
     plikwy.close();
 }
 
-int findLargestChild(int array[], int parentID)
+void doMaxHeap(int array[], int size, int parentID)
 {
-    int largest;
-    int root = array[parentID];
-    int i = parentID;
-    int child;
-    if ((2 * i + 1 < SIZE) && (2 * i + 2 < SIZE))
-    {
-        largest = max(array[2 * i + 1], array[2 * i + 2]);
-        if (largest == array[2 * i + 1])
-            child = 2 * i + 1;
-        else
-            child = 2 * i + 2;
+    int topID = parentID;
+    int leftChildID = parentID * 2 + 1;
+    int rightChildID = parentID * 2 + 2;
+
+    if (leftChildID < size && array[leftChildID] > array[topID])
+        topID = leftChildID;
+    if (rightChildID < size && array[rightChildID] > array[topID])
+        topID = rightChildID;
+    if(topID != parentID){
+        swap(array[topID], array[parentID]);
+        doMaxHeap(array,size,topID);
     }
-    else if (2 * i + 2 == SIZE - 1)
-    {
-        largest = array[2 * i + 2];
-        child = 2 * i + 2;
-    }
-    else if (2 * i + 1 == SIZE - 1)
-    {
-        largest = array[2 * i + 1];
-        child = 2 * i + 1;
-    }
-    else
-        return -1;
-    return child;
 }
 
 void heapSort(int array[], int size)
 {
-    int parentID;
+    if (size == 0)
+        return;
+    for (int i = size / 2 - 1; i >= 0; i--)
+    {
+        doMaxHeap(array, size, i);
+    }
     for (int i = size - 1; i > 0; i--)
     {
-        if ((i - 1) % 2 == 0)
-            parentID = (i - 1) / 2;
-        else
-            parentID = (i - 2) / 2;
-
-        int largestChildID = findLargestChild(array, parentID);
-
-        int tmp1 = array[parentID];
-        int tmp2 = array[largestChildID];
-        if (array[parentID] < array[largestChildID])
-            swap(array[parentID], array[largestChildID]);
-        // printArray(array, size);
+        swap(array[0], array[i]);
+        size--;
+        doMaxHeap(array, size, 0);
     }
 }
 
-void swapWithBiggerChild(int array[], int parentID, int done_nr)
-{
-    int largestChildID = findLargestChild(array, parentID);
-    if (largestChildID > 0)
-    {
-        // printArray(array, SIZE);
-        int tmp1IDX = parentID;
-        int tmp2IDX = largestChildID;
-        int tmp1 = array[parentID];
-        int tmp2 = array[largestChildID];
-        if ((largestChildID < SIZE - done_nr) && (array[largestChildID] > array[parentID]))
-            swap(array[parentID], array[largestChildID]);
-        // printArray(array, SIZE);
-        swapWithBiggerChild(array, largestChildID, done_nr);
-    }
-}
-
-void endHeapSort(int array[], int size)
-{
-    int parentID;
-    int finalArray[size];
-    for (int done_nr = 1; done_nr < size - 1; done_nr++)
-    {
-        swap(array[0], array[size - done_nr]);
-        // printArray(array, size);
-        for (int parentID = 0; parentID < SIZE - (done_nr + 1); parentID++)
-        {
-            swapWithBiggerChild(array, parentID, done_nr);
-            // printArray(array, size);
-        }
-    }
-    // printArray(array, size);
-}
 
 int generatePivotValue(int array[], int leftIDX, int rightIDX)
 {
@@ -115,7 +67,7 @@ int generatePivotValue(int array[], int leftIDX, int rightIDX)
 int quickSort(int array[], int size)
 {
     static int iteration = 0;
-    if (iteration < 5)
+    if (iteration < ITERATION)
     {
         iteration++;
         int leftIDX = 0;
@@ -148,10 +100,9 @@ int quickSort(int array[], int size)
 
 void introSort(int array[], int size)
 {
-    if (quickSort(array, size) == 5)
+    if (quickSort(array, size) == ITERATION)
     {
         heapSort(array, size);
-        endHeapSort(array, size);
     }
 }
 
@@ -163,7 +114,7 @@ int main()
     int testArray2[size];
     for (int i = 0; i < size; i++)
     {
-        int number = rand() % 1000 + 1;
+        int number = rand() % SIZE + 1;
         testArray[i] = number;
         testArray2[i] = number;
     }
