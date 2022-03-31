@@ -31,17 +31,20 @@ int largest(int array[], int parentID)
     if ((2 * i + 1 < SIZE) && (2 * i + 2 < SIZE))
     {
         largest = max(array[2 * i + 1], array[2 * i + 2]);
-        child = largest;
+        if (largest == array[2 * i + 1])
+            child = 2 * i + 1;
+        else
+            child = 2 * i + 2;
     }
     else if (2 * i + 2 == SIZE - 1)
     {
         largest = array[2 * i + 2];
-        child = largest;
+        child = 2 * i + 2;
     }
     else if (2 * i + 1 == SIZE - 1)
     {
         largest = array[2 * i + 1];
-        child = largest;
+        child = 2 * i + 1;
     }
     else
         return NULL;
@@ -60,13 +63,13 @@ void heapSort(int array[], int size)
 
         int largestChild = largest(array, parentID);
 
-        int tmp1=array[parentID]; int tmp2 = array[largestChild];
+        int tmp1 = array[parentID];
+        int tmp2 = array[largestChild];
         if (array[parentID] < array[largestChild])
             swap(array[parentID], array[largestChild]);
         printArray(array, size);
     }
 }
-
 
 int main()
 {
