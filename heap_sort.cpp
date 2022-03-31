@@ -2,7 +2,7 @@
 #include <fstream>
 #include <random>
 #include <chrono> 
-#define SIZE 10000 // Liczba elementów do posortowania
+#define SIZE 1000000 // Liczba elementów do posortowania
 using namespace std;
 
 // Wypisywanie tablicy do konsoli
@@ -108,18 +108,11 @@ int main()
     srand(1);
     int size = SIZE;
     int testArray[size]; // 4 7 8 6 4 6 7 3 10
-    int testArray2[size];
     for (int i = 0; i < size; i++)
     {
         int number = rand() % 1000 + 1;
         testArray[i] = number;
-        testArray2[i] = number;
     }
-    // int testArray[] = {9, 1, 2, 4, 5, 7, 8, 6, 3};
-    //int testArray[] = {4,7,8,6,4,6,7,5,10,69};
-    // int testArray[] = {9, 7, 4, 3, 6, 5, 1, 2, 8, 11};
-
-    //printArray(testArray, size);
     auto start = std::chrono::high_resolution_clock::now();
     heapSort(testArray, size);
     endHeapSort(testArray, size);

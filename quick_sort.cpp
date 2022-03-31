@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <random>
-#include <chrono> 
+#include <chrono>
 #define SIZE 1000000 // Liczba elementów do posortowania
 using namespace std;
 
@@ -22,8 +22,6 @@ void printArrayToFile(int array[], int size, char filename[])
         plikwy << array[i] << "," << endl;
     plikwy.close();
 }
-
-
 
 // void quickSort(int array[], int leftIDX, int rightIDX)
 // {
@@ -65,13 +63,13 @@ void quickSort(int array[], int size)
 {
     int leftIDX = 0;
     int rightIDX = size - 1;
-    //printArray(array, size);
+    // printArray(array, size);
     if (leftIDX < rightIDX)
     {
         int pivotValue = generatePivotValue(array, leftIDX, rightIDX);
         while (leftIDX <= rightIDX)
         {
-            //printArray(array, size);
+            // printArray(array, size);
             while (array[leftIDX] < pivotValue)
                 leftIDX++;
             while (array[rightIDX] > pivotValue)
@@ -84,34 +82,42 @@ void quickSort(int array[], int size)
                 rightIDX--;
             }
         }
-        quickSort(array, rightIDX + 1); //od lewej krawędzi do pierwszej nieuporządowanej liczby
-        quickSort(&array[leftIDX], size - leftIDX); //od pierwszej nieuporządkowanej liczby do prawej krawędzi
+        quickSort(array, rightIDX + 1);             // od lewej krawędzi do pierwszej nieuporządowanej liczby
+        quickSort(&array[leftIDX], size - leftIDX); // od pierwszej nieuporządkowanej liczby do prawej krawędzi
     }
+}
+
+void printResultToFile(int number, int size, float time, char filename[])
+{
+    ofstream plikwy;
+    plikwy.open(filename,std::ios_base::app);
+    plikwy << "Nr." << number << " Czas: " << time << "  Rozmiar: " << size << endl;
+    plikwy.close();
 }
 
 // Funkcja main, sortuje oraz zapisuje dane do pliku
 int main()
 {
-    srand(1);
-    int size = SIZE;
-    int testArray[size]; // 4 7 8 6 4 6 7 3 10
-    int testArray2[size];
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < 100; i++)
     {
-        int number = rand() % 100000 + 1;
-        testArray[i] = number;
-        testArray2[i] = number;
+        srand(i);
+        int size = SIZE;
+        int testArray[size]; // 4 7 8 6 4 6 7 3 10
+        int testArray2[size];
+        for (int i = 0; i < size; i++)
+        {
+            int number = rand() % SIZE + 1;
+            testArray[i] = number;
+            testArray2[i] = number;
+        }
+
+        // printArray(testArray, size);
+        auto start = std::chrono::high_resolution_clock::now();
+        quickSort(testArray, size);
+        auto finish = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> elapsed = finish - start;
+        std::cout << "Elapsed time: " << elapsed.count() << " s\n";
+        printResultToFile(i + 1, size, elapsed.count(), "quick_sort-wyniki.txt");
     }
-
-    printArray(testArray, size);
-    auto start = std::chrono::high_resolution_clock::now();
-    quickSort(testArray, size);
-    auto finish = std::chrono::high_resolution_clock::now();
-
-    cout << "Sorted array: \n";
-    printArray(testArray, size);
-    std::chrono::duration<double> elapsed = finish - start;
-    std::cout << "Elapsed time: " << elapsed.count() << " s\n";
-    printArrayToFile(testArray, size, "merge_sort");
     return 0;
 }

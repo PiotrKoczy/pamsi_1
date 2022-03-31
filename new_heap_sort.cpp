@@ -57,6 +57,7 @@ void heapSort(int array[], int size)
 
 int main()
 {
+    for(int i=0;i<100;i++)
     srand(1);
     int size = SIZE;
     int testArray[size]; // 4 7 8 6 4 6 7 3 10
