@@ -77,14 +77,14 @@ int main()
             testArray[i] = number;
             testArray2[i] = number;
         }
-
+        heapSort(testArray, size/2);
         // printArray(testArray, size);
         auto start = std::chrono::high_resolution_clock::now();
         heapSort(testArray, size);
         auto finish = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> elapsed = finish - start;
         std::cout << "Elapsed time: " << elapsed.count() << " s\n";
-        printResultToFile(i + 1, size, elapsed.count(), "new_heap_sort-wyniki.txt");
+        //printResultToFile(i + 1, size, elapsed.count(), "new_heap_sort-wyniki.txt");
     }
     return 0;
 }

@@ -2,8 +2,7 @@
 #include <fstream>
 #include <random>
 #include <chrono>
-#define SIZE 1000000 // Liczba elementów do posortowania
-
+#define SIZE 500000 // Liczba elementów do posortowania
 
 using namespace std;
 
@@ -66,8 +65,9 @@ int generatePivotValue(int array[], int leftIDX, int rightIDX)
 
 int quickSort(int array[], int size)
 {
-    static int MAXiteration = 2*log(size)/M_LN2;
+    static int MAXiteration = 2 * log(size) / M_LN2;
     static int iteration = 0;
+    iteration++;
     int leftIDX = 0;
     int rightIDX = size - 1;
     // printArray(array, size);
@@ -90,7 +90,7 @@ int quickSort(int array[], int size)
             }
         }
 
-        if (iteration == MAXiteration)
+        if (iteration >= MAXiteration)
         {
             heapSort(array, size);
             iteration = 0;
@@ -108,36 +108,102 @@ void introSort(int array[], int size)
     quickSort(array, size);
 }
 
-void printResultToFile(int number, int size, float time, char filename[])
+void printResultToFile(int number, int size, float time, string filename)
 {
     ofstream plikwy;
-    plikwy.open(filename,std::ios_base::app);
-    plikwy << "Nr." << number << " Czas: " << time << "  Rozmiar: " << size << endl;
+    plikwy.open(filename, std::ios_base::app);
+    plikwy << number << "," << time << endl;
     plikwy.close();
+}
+
+void test(int array[], int size, string filename, int idx)
+{
+    auto start = std::chrono::high_resolution_clock::now();
+    introSort(array, size);
+    auto finish = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = finish - start;
+    std::cout << "Elapsed time: " << elapsed.count() << " s\n";
+    printResultToFile(idx + 1, size, elapsed.count(), filename);
+}
+
+void generateRandom(int testArray[], int size, int seed)
+{
+    srand(seed);
+    for (int i = 0; i < size; i++)
+    {
+        int number = rand() % size + 1;
+        testArray[i] = number;
+    }
+}
+
+void copyArray(int randomArray1[], int randomArray2[], int size)
+{
+    for (int i = 0; i < size; i++)
+    {
+        randomArray1[i] = randomArray2[i];
+    }
+}
+
+void reverseArray(int array[], int size)
+{
+    for (int i = 0; i < size; i++)
+    {
+        swap(array[i],array[size-i]);
+    }
 }
 
 int main()
 {
+    int testArray[SIZE];
+    int randomArray[SIZE];
+    int size = SIZE;
+    int size_array[4]={10000,50000,100000,500000};
+    std::string result;
+    int c=sizeof(size_array)/sizeof(size_array[0]);
+    for (int a = 0; a < c; a++)
+    {
+    
     for (int i = 0; i < 100; i++)
     {
-        srand(i);
-        int size = SIZE;
-        int testArray[size]; // 4 7 8 6 4 6 7 3 10
-        int testArray2[size];
-        for (int i = 0; i < size; i++)
-        {
-            int number = rand() % SIZE + 1;
-            testArray[i] = number;
-            testArray2[i] = number;
-        }
+        generateRandom(randomArray, size_array[a], i);
+        copyArray(testArray, randomArray, size_array[a]);
+        result = "wyn_introsort_fullrng_" + std::to_string(size_array[a]) + ".csv";
+        test(testArray, size_array[a], result, i);
 
-        // printArray(testArray, size);
-        auto start = std::chrono::high_resolution_clock::now();
-        introSort(testArray, size);
-        auto finish = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double> elapsed = finish - start;
-        std::cout << "Elapsed time: " << elapsed.count() << " s\n";
-        printResultToFile(i + 1, size, elapsed.count(), "introsort-wyniki.txt");
+        copyArray(testArray, randomArray, size_array[a]);
+        introSort(testArray, size_array[a] / 4);
+        result = "wyn_introsort_25_" + std::to_string(size_array[a]) + ".csv";
+        test(testArray, size_array[a], result, i);
+
+        copyArray(testArray, randomArray, size_array[a]);
+        introSort(testArray, size_array[a] / 2);
+        result = "wyn_introsort_50_" + std::to_string(size_array[a]) + ".csv";
+        test(testArray, size_array[a], result, i);
+
+        copyArray(testArray, randomArray, size_array[a]);
+        introSort(testArray, size_array[a] * 0.75);
+        result = "wyn_introsort_75_" + std::to_string(size_array[a]) + ".csv";
+        test(testArray, size_array[a], result, i);
+        copyArray(testArray, randomArray, size_array[a]);
+        introSort(testArray, size_array[a] * 0.95);
+        result = "wyn_introsort_95_" + std::to_string(size_array[a]) + ".csv";
+        test(testArray, size_array[a], result, i);
+
+        copyArray(testArray, randomArray, size_array[a]);
+        introSort(testArray, size_array[a] * 0.99);
+        result = "wyn_introsort_99_" + std::to_string(size_array[a]) + ".csv";
+        test(testArray, size_array[a], result, i);
+
+        copyArray(testArray, randomArray, size_array[a]);
+        introSort(testArray, size_array[a] * 0.997);
+        result = "wyn_introsort_99_7_" + std::to_string(size_array[a]) + ".csv";
+        test(testArray, size_array[a], result, i);
+
+        copyArray(testArray, randomArray, size_array[a]);
+        reverseArray(testArray, size_array[a]);
+        result = "wyn_introsort_reverse_" + std::to_string(size_array[a]) + ".csv";
+        test(testArray, size_array[a], result, i);
+    }
     }
     return 0;
 }
